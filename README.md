@@ -115,3 +115,20 @@ sh쉘이였고 쉘 환경에 들어올 수 있었다. 그리고 /jail 폴더안�
    0x000055555555540f <+199>:   ret    
    
    문제에서 JW가 피드백을 쓰는 도중 오타를 발생했고 그래도 정상적으로 진행됐다고 한다. 이 어셈블리어 영역을 봐야할 것 같다.
+   
+   ──(root㉿kali)-[/home/kali/Downloads/attachments]
+└─# ./chall
+Do you want to complete a survey?
+yes
+Do you like ctf?
+yes
+You said: yes
+
+That's great! Can you provide some extra feedback?
+yes
+Do you want to complete a survey?
+
+
+--> getchar 함수때문에 yes에서 y만 읽힌다. 
+
+0x7fffffffe1fe 메모리에서 read함수에 넣은 입력값들을 확인할 수 있었다.
