@@ -1,5 +1,8 @@
 # idek-CTF-pwn
 
+https://ctf.idek.team/login?token=UwaWxM9tCbdQvWbITImXLU34R4nIfZxYWbt8D8U%2BP7g%2Bv3loyhg3EY62E%2FRbOuTo%2Fecvq2InuS3DhqNSpxoY6KwcnWLTWMMTuaXtkByDa7QhchOFwQcYqcbZ16dI
+
+
 1) Typop
 dockerfile이란? : 이미지를 생성하기 위한 용도로 작성하는 파일이다.
 지시어 : 각 라인 맨앞에 있는 대문자들
@@ -47,3 +50,18 @@ dockerfile이란? : 이미지를 생성하기 위한 용도로 작성하는 파�
 
 실행파일을 디버깅했을 때는 이상한 점은 없었다....
 아마 도커파일로 서버에 접속해야하는 것 같다
+
+docker build -t fin:latest ./ 
+
+docker images
+
+docker run -it --privileged fin
+
+docker ps -a : 실행중인 도커를 볼 수 있다.
+
+docker exec 이름 fin /bin/bash or /bin/sh --> *bash 쉘이 아닐 경우 sh쉘로 생각하고 명령어를 넣어보자
+
+sh쉘이였고 쉘 환경에 들어올 수 있었다. 그리고 /jail 폴더안의 run 파일을 실행하니까 아래와 같은 에러 메시지가 뜬다.
+자꾸 mount cgroup2 to /jail/cgroup/unified : device or resource busy 오류가 뜬다
+
+무엇으로 flag를 구해야할지 감이 잘 오지않는다. 우선 쉘 안에 들어왔지만 
