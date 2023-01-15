@@ -132,3 +132,12 @@ Do you want to complete a survey?
 --> getchar 함수때문에 yes에서 y만 읽힌다. 
 
 0x7fffffffe1fe 메모리에서 read함수에 넣은 입력값들을 확인할 수 있었다.
+
+
+info func를 해보니 win함수라는게 있었다. 그래서 getchar 함수를 이용해서 getchar 함수 ret 부분에 win함수의 주소를 넣어서 전체 흐름을 변조해보려고 한다.
+이것을 하기 위해서는 getchar 함수의 어셈블리어를 보면서 getchar에 넣은 값이 어느 주소값 들어가는지, ret 위치를 알아야 할 것 같다.
+
+명령어 과정
+b *getchar -> x/20i(어셈블리어 보기) 0x7ffff7e4cc92 -> 0x00007ffff7e51fff에서 입력값을 받는다(getchar함수에서 입력값 받는 역할하는 함수를 불러옴) : IO_file_jumps+20 =>IO_validate_vtable=> (x/20i 0x07ffff7e5100b 조사)여기서 si해서 함수 메모리 할당 크기보기 -> 0x7ffff7e5100b에서 다른 함수를 호출한다
+ 
+* 0x00007ffff7e51fff에서 si ->  0x7ffff7e5100b에서 si -> 0x7ffff7ec702b에서 si -> _IO_new_file_underflow에서의 0x07ffff7e51032를 실행 후 x/x $rax를 조사하면 내가 입력한 값들이 있다(123456을 볼 수있다.) (ret영역 0x07ffff7e51043)
