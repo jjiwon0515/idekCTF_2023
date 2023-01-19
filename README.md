@@ -4,23 +4,31 @@ https://ctf.idek.team/login?token=UwaWxM9tCbdQvWbITImXLU34R4nIfZxYWbt8D8U%2BP7g%
 
 
 1) Typop
-dockerfile이란? : 이미지를 생성하기 위한 용도로 작성하는 파일이다.
-지시어 : 각 라인 맨앞에 있는 대문자들
-양식 : FROM   pwn.red/jail
-       COPY   --from=unbuntu:20.04/ /srv
+dockerfile이란? : 이미지를 생성하기 위한 용도로 작성하는 파일이다.<br>
+지시어 : 각 라인 맨앞에 있는 대문자들-->Ex) FROM, COPY, RUN, ADD 등등<br>
+
+```
+양식 : FROM   pwn.red/jail<br>
+       COPY   --from=unbuntu:20.04/ /srv<br>
        RUN    mkdir /srv/app                  --> /srv/app 폴더를 만든다.
-       ADD    chall /srv/app/run              --> 호스트에 있는 chall파일을 /srv/app/run 폴더 안에 추가      
-       ADD    flag.txt  /srv/app/flag.txt     --> 호스트에 있는 flag.txt파일을 /srv/app/flag.txt 폴더 안에 추가
-       RUN    chmod +x /srv/app/run           --> 
-       
-       1) FROM : 베이스 이미지와 태그를 지정하면 레지스트리(이미지를 저장하는 저장소)에서 해당 이미지를 땡겨온다.
-       2) COPY : 파일과 디렉토리에 대한 소유 권한을 지정한다. 또는 파일 또는 디렉토리를 컨테이너의 파일 시스템으로 복사
+       ADD    chall /srv/app/run              --> 호스트에 있는 chall파일을 /srv/app/run 폴더 안에 추가
+       ADD    flag.txt  /srv/app/flag.txt     --> 호스트에 있는 flag.txt파일을 /srv/app/flag.txt에 추가
+       RUN    chmod +x /srv/app/run          
+```
+
+
+
+       1) FROM : 베이스 이미지와 태그를 지정하면 레지스트리(이미지를 저장하는 저장소)에서 해당 이미지를 가져옴 
+       2) COPY : 파일과 디렉토리에 대한 소유 권한을 지정한다. 또는 복사
        3) RUN : 명령어를 실행하여 새 이미지에 포함시키는 역할을 한다.
        4) ADD : COPY와 거의 비슷하다.
        
        
- *Dockerfile 빌드 명령어 : docker build -t mybuild:0.0 ./
- *Dockerfile 실행 명령어 : docker run -d -p 80:80 --name myserver mybuild:0.0
+ *Dockerfile 빌드 명령어 : docker build -t mybuild:0.0 ./ <br>
+ *Dockerfile 실행 명령어 : docker run -d -p 80:80 --name myserver mybuild:0.0<br><br>
+ 
+ 
+ 
  
  
  ```asm
@@ -47,24 +55,23 @@ dockerfile이란? : 이미지를 생성하기 위한 용도로 작성하는 파�
    0x0000555555555461 <+81>:    mov    eax,0x0
    0x0000555555555466 <+86>:    pop    rbp
    0x0000555555555467 <+87>:    ret    
+```
 
-실행파일을 디버깅했을 때는 이상한 점은 없었다....
+실행파일을 디버깅했을 때는 이상한 점은 없었다....<br>
 아마 도커파일로 서버에 접속해야하는 것 같다
 
+```
 docker build -t fin:latest ./ 
-
 docker images
-
 docker run -it --privileged fin
-
 docker ps -a : 실행중인 도커를 볼 수 있다.
-
 docker exec 이름 fin /bin/bash or /bin/sh --> *bash 쉘이 아닐 경우 sh쉘로 생각하고 명령어를 넣어보자
+```
 
-sh쉘이였고 쉘 환경에 들어올 수 있었다. 그리고 /jail 폴더안의 run 파일을 실행하니까 아래와 같은 에러 메시지가 뜬다.
-자꾸 mount cgroup2 to /jail/cgroup/unified : device or resource busy 오류가 뜬다
 
-무엇으로 flag를 구해야할지 감이 잘 오지않는다. 우선 쉘 안에 들어왔지만 
+sh쉘이였고 쉘 환경에 들어올 수 있었다. 그리고 /jail 폴더안의 run 파일을 실행하니까 아래와 같은 에러 메시지가 뜬다.<br>
+자꾸 mount cgroup2 to /jail/cgroup/unified : device or resource busy 오류가 뜬다.<br>
+ 
 
 
 ```c
@@ -113,9 +120,14 @@ sh쉘이였고 쉘 환경에 들어올 수 있었다. 그리고 /jail 폴더안�
    0x0000555555555409 <+193>:   call   0x5555555550e0 <__stack_chk_fail@plt>
    0x000055555555540e <+198>:   leave  
    0x000055555555540f <+199>:   ret    
-   
-   문제에서 JW가 피드백을 쓰는 도중 오타를 발생했고 그래도 정상적으로 진행됐다고 한다. 이 어셈블리어 영역을 봐야할 것 같다.
-   
+```
+
+   문제를 다시 확인하니까<br>
+   문제에서 JW가 피드백을 쓰는 도중 오타를 발생했고 그래도 정상적으로 진행됐다고 한다. <br>
+   이 어셈블리어 영역을 봐야할 것 같다.<br>
+
+
+```   
    ──(root㉿kali)-[/home/kali/Downloads/attachments]
 └─# ./chall
 Do you want to complete a survey?
@@ -128,22 +140,25 @@ That's great! Can you provide some extra feedback?
 yes
 Do you want to complete a survey?
 
-
 --> getchar 함수때문에 yes에서 y만 읽힌다. 
+```
 
 0x7fffffffe1fe 메모리에서 read함수에 넣은 입력값들을 확인할 수 있었다.
 
 
-info func를 해보니 win함수라는게 있었다. 그래서 getchar 함수를 이용해서 getchar 함수 ret 부분에 win함수의 주소를 넣어서 전체 흐름을 변조해보려고 한다.
-이것을 하기 위해서는 getchar 함수의 어셈블리어를 보면서 getchar에 넣은 값이 어느 주소값 들어가는지, ret 위치를 알아야 할 것 같다.
+info func를 해보니 win함수라는게 있었다. <br>
+그래서 getchar 함수를 이용해서 getchar 함수 ret 부분에 win함수의 주소를 넣어서 전체 흐름을 변조해보려고 한다.<br>
+이것을 하기 위해서는 getchar 함수의 어셈블리어를 보면서 getchar에 넣은 값이 어느 주소값 들어가는지,
+ret 위치를 알아야 할 것 같다.<br><br>
 
 명령어 과정
-b *getchar -> x/20i(어셈블리어 보기) 0x7ffff7e4cc92 -> 0x00007ffff7e51fff에서 입력값을 받는다(getchar함수에서 입력값 받는 역할하는 함수를 불러옴) : IO_file_jumps+20 =>IO_validate_vtable=> (x/20i 0x07ffff7e5100b 조사)여기서 si해서 함수 메모리 할당 크기보기 -> 0x7ffff7e5100b에서 다른 함수를 호출한다
+b *getchar -> x/20i(어셈블리어 보기) 0x7ffff7e4cc92 
+-> 0x00007ffff7e51fff에서 입력값을 받는다(getchar함수에서 입력값 받는 역할하는 함수를 불러옴) :IO_file_jumps+20 =>IO_validate_vtable=> (x/20i 0x07ffff7e5100b 조사)여기서 si해서 함수 메모리 할당 크기보기 -> 0x7ffff7e5100b에서 다른 함수를 호출한다
  
 * 0x00007ffff7e51fff에서 si ->  0x7ffff7e5100b에서 si -> 0x7ffff7ec702b에서 si -> _IO_new_file_underflow에서의 0x07ffff7e51032를 실행 후 x/x $rax를 조사하면 내가 입력한 값들이 있다(123456을 볼 수있다.) (ret영역 0x07ffff7e51043)
 
 
-
+```
 /jail # ./nsjail
  Usage: ./nsjail [options] -- path_to_command [args]
  Options:
@@ -352,6 +367,8 @@ b *getchar -> x/20i(어셈블리어 보기) 0x7ffff7e4cc92 -> 0x00007ffff7e51fff
 [E][2023-01-15T14:39:14+0000][51] setupArgv():330 No command-line provided
 [F][2023-01-15T14:39:14+0000][51] main():333 Couldn't parse cmdline options
 <--- nsjail을 열었을때
+```
+
 
 생각했던 솔루션 : 디버깅할 때 win이라는 함수가 있었는데 변조해서 win 함수를 보는 것이였다. (win의 주소가 0x00000000000001249였는데 0x12를 입력값에 넣지 못하고 
 ret의 위치에 대한 확신이 없어서 이 방법으로는 할 수 없었다)
