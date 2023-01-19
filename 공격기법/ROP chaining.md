@@ -1,6 +1,8 @@
 https://d4m0n.tistory.com/84
 
-ROP chaining이란 : ROP(Return Oriented Programming) chaining
+ROP chaining이란 : ROP(Return Oriented Programming) chaining으로 버퍼 오버플로우 취약점이 발생하는
+바이너리를 exploit 할 때 가장 많이 사용되는 기법으로 바이너리 내부에 존재하는 gadgeet을 사용하여 호출 함수 
+및 인자를 조작하는 방법이다. 
 
 
 *Exploit 실습
@@ -38,6 +40,8 @@ https://liveyourit.tistory.com/121
 
 
 
+
+
 https://dokhakdubini.tistory.com/51
 rop를 할때 중요한 과정 : gadget을 찾는 것이다. 
 명령어 : ROPgadget --binary (파일명) | grep "(찾을 가젯)"
@@ -49,4 +53,4 @@ rop를 할때 중요한 과정 : gadget을 찾는 것이다.
 --> ropsearch 명령어 이용하기 
 
 https://hg2lee.tistory.com/entry/%EC%8B%9C%EC%8A%A4%ED%85%9C-Return-Oriented-Programming-ROP-x86-32bit
-
+https://kaspyx.tistory.com/100
