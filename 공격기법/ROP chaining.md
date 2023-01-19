@@ -47,3 +47,6 @@ rop를 할때 중요한 과정 : gadget을 찾는 것이다.
 1. 진짜로 pop rdx가 없다 --> libc를 직접 찾아 주어야한다
 2. ROPgadget으로는 조회되지 않는다. 
 --> ropsearch 명령어 이용하기 
+
+https://hg2lee.tistory.com/entry/%EC%8B%9C%EC%8A%A4%ED%85%9C-Return-Oriented-Programming-ROP-x86-32bit
+
