@@ -1,8 +1,82 @@
-https://liveyourit.tistory.com/122
-https://hg2lee.tistory.com/65
-https://rninche01.tistory.com/18
-https://j4guar.tistory.com/12
-https://bnzn2426.tistory.com/28
+https://liveyourit.tistory.com/122 <br> 
+기존의 스택구조 : buf + SFP + RET <br>
+RTL을 적용한 스택구조 : buf + SFP + func1 address + dummy(func1 ret) + func1 argv[0]<br>
+-> 원래 RET 자리에 system함수의 주소값이 왔으므로 eip가 func1함수의 주소가 되어 func1함수를 실행한다.<br>
+-> ret 영역에 주소 변조를 하기위해서는 원하는 공유 라이브러리 함수의 주소가 필요하다 <br>
+->우선 실행을 돌려야 공유 라이브러리가 실행되기때문에 실행 후 <br>
+p [함수이름] 명령어를 이용하여 해당 함수의 주소를 찾아내야한다. + find "string"을 해서 원하는 문자열의 주솟값도 알아낼 수 있다.<br>
+==> 위 설명이  기본적인 RTL을 이용한 취약점이다. 이것을 chaining하여 연속적으로 흐름을 제어활 수 있는 방법이 있다.<br>
+
+RTL 실습 환경
+```c
+-소스코드
+#include<stdio.h>+
+
+int main(){
+        char buf[100];
+        read(0,buf,200);
+        printf("%s\n",buf);
+}
+
+```
+
+```asm
+-디버깅 작업
+
+
+
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RTL chaining : RTL 공격에서 RET 주소를 변조하여 하나의 공유라이브를 호출했다면, RTL chaining 공격 기법은 RTL 공격 기법을 응용하여 여러 개의 공유 라이브러리 함수를 호출할 수 있다.
+
+
+```c
+-소스코드
+
+
+
+```
+
+
+
+
+```
+-디버깅 작업
+
+
+
+```
+
+*RTL chaining에서 가젯(gadget)을 사용하는 이유와 사용법 : 
+이유 : 위의 예시처럼 익스폴로잇하면 call_me1 함수는 잘 실행되겠지만 dummy값때문에 call_me2는 제대로 실행되지 
+
+ * func1은 인자가 1개인 함수
+ * func2는 인자가 2개인 함수
+https://hg2lee.tistory.com/65 <br> 
+https://rninche01.tistory.com/18 <br>
+https://j4guar.tistory.com/12 <br>
+https://bnzn2426.tistory.com/28 <br>
 
 
 RTL(Return to Libc) 이란? : 사용자가 작성한 코드에 없는 함수를 호출하고자 메모리에 이미 적재된 공유 라이브러리의 원하는 함수를 
