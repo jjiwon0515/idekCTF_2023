@@ -30,7 +30,7 @@ find Gadget명령어 :
 ropsearch "pop rdi"
 
 https://liveyourit.tistory.com/121
-
+궁금한점 : PLT GOT에서 GOT의 함수 주소는 ASLR가 있어도 변하지 않는다?
 
 
 
